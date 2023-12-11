@@ -8,8 +8,11 @@
 
 - Algorithms :
 
-    -  Naive Bayes with matrix representation ? 
-
+    -  Naive Bayes with representation : 
+        - matrix ?  
+        - code de freeman 
+        - histogramme ?
+        
     - KNN with Freeman's code + Edit distance
 
     - Neural Network
