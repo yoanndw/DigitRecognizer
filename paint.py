@@ -38,7 +38,7 @@ class DigitRecognitionApp:
 
         self.dessiner = True
         self.selected_digit = None
-        self.image = Image.new("L", (280, 280), color="white")
+        self.image = Image.new("L", (280, 280), color="black")
         self.draw = ImageDraw.Draw(self.image)
 
         # Associe le click gauche à la fonction "dessiner_digit"
@@ -50,13 +50,14 @@ class DigitRecognitionApp:
         if self.dessiner:
             x, y = event.x, event.y
             current_color = self.image.getpixel((x, y))
-            new_color = 255 if current_color == 0 else 0
+            new_color = 255 
+            self.draw.rectangle([x, y, x + 5, y + 5], fill=new_color)
             self.canvas.create_rectangle(x, y, x + 5, y + 5, fill="white", outline="white")
 
     # Fonction du bouton "Effacer". Remet tous les pixels en noirs.
     def effacer_dessin(self):
         self.canvas.delete("all")
-        self.image = Image.new("L", (280, 280), color="white")
+        self.image = Image.new("L", (280, 280), color="black")
         self.draw = ImageDraw.Draw(self.image)
 
     # Fonction du bouton "Enregistrer". 
@@ -64,7 +65,7 @@ class DigitRecognitionApp:
     def enregistrer_digit(self):
         global digit_counters
         if self.selected_digit is not None:
-            self.image.save(f"AFAC/{self.selected_digit}_{digit_counters[self.selected_digit]}.png")
+            self.image.save(f"../AFAC/{self.selected_digit}_{digit_counters[self.selected_digit]}.png")
             digit_counters[self.selected_digit] += 1
 
     # Fonction des boutons "digit". Permet de selectionner le numéro du digit dessiné.
