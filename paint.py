@@ -51,8 +51,7 @@ class DigitRecognitionApp:
             x, y = event.x, event.y
             current_color = self.image.getpixel((x, y))
             new_color = 255 if current_color == 0 else 0
-            self.image.putpixel((x, y), new_color)
-            self.canvas.create_rectangle(x, y, x + 1, y + 1, fill="white", outline="white")
+            self.canvas.create_rectangle(x, y, x + 5, y + 5, fill="white", outline="white")
 
     # Fonction du bouton "Effacer". Remet tous les pixels en noirs.
     def effacer_dessin(self):
@@ -82,7 +81,7 @@ class DigitRecognitionApp:
         self.selected_digit_button.config(bg="blue")
 
 if __name__ == "__main__":
-    
+
     fenetre = tk.Tk()
     app = DigitRecognitionApp(fenetre)
     fenetre.geometry("400x450")
