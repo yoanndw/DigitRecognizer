@@ -7,6 +7,9 @@ import cv2
 from matplotlib import pyplot as plt
 from itertools import chain
 
+INSERTION_COST = 1
+DELETION_COST = 1
+EDITION_COST = 2
 
 def freeman_from_dataframe(dataframe):
     """Returns the Freeman code from a 1D dataframe.
@@ -88,10 +91,51 @@ def freeman_from_dataframe(dataframe):
     return chain
     
 
-def main():
-    train = pd.read_csv("train.csv")
+def _cost(source, dest):
+    if dest == '': # deletion
+        return DELETION_COST
+    if source == '': # insertion
+        return INSERTION_COST
+    if source == dest:
+        return 0
+    
+    return EDITION_COST
 
-    print(freeman_from_dataframe(train))
+
+def levenshtein(s1, s2):
+    len_s1 = len(s1)
+    len_s2 = len(s2)
+
+    n_rows = len_s1 + 1
+    n_cols = len_s2 + 1
+
+    distance = []
+    for i in range(n_rows):
+        distance.append([0] * n_cols)
+        distance[i][0] = i
+
+    for j in range(len_s2 + 1):
+        distance[0][j] = j
+    
+    for i in range(1, n_rows):
+        for j in range(1, n_cols):
+            c1 = s1[i - 1]
+            c2 = s2[j - 1]
+            d1 = distance[i - 1][j - 1] + _cost(c1, c2) 
+            d2 = distance[i - 1][j] + _cost(c1, '') 
+            d3 = distance[i][j - 1] + _cost('', c2) 
+            distance[i][j] = min(d1, d2, d3)
+
+    return distance[len_s1][len_s2]
+
+
+def main():
+    # train = pd.read_csv("train.csv")
+
+    # print(freeman_from_dataframe(train))
+
+    d = levenshtein("chien", "niche")
+    print(d)
 
 
 if __name__ == "__main__":
