@@ -1,3 +1,6 @@
+import os
+import os.path
+
 import cv2
 import numpy as np
 from PIL import Image
@@ -24,16 +27,105 @@ def load_image_into_2d(path):
     return image
 
 
+def freeman_from_np_2d(image):
+    """Returns the Freeman code from a 1D dataframe.
+    
+    Params:
+        dataframe: 1D dataframe filled with integers in [0, 255]
+
+    Returns:
+        list of int
+    """
+    # Any results you write to the current directory are saved as output.
+    # print("new shape", image.shape)
+    # plt.imshow(image, cmap='Greys')
+
+    # plt.imshow(image, cmap='Greys')
+    ## Discover the first point 
+    for i, row in enumerate(image):
+        for j, value in enumerate(row):
+            if value == 255:
+                start_point = (i, j)
+                # print(start_point, value)
+                break
+        else:
+            continue
+        break
+    image[3:6, 19:22]
+    directions = [ 0,  1,  2,
+                7,      3,
+                6,  5,  4]
+    dir2idx = dict(zip(directions, range(len(directions))))
+
+    change_j =   [-1,  0,  1, # x or columns
+                -1,      1,
+                -1,  0,  1]
+
+    change_i =   [-1, -1, -1, # y or rows
+                0,      0,
+                1,  1,  1]
+
+    border = []
+    chain = []
+    curr_point = start_point
+    for direction in directions:
+        idx = dir2idx[direction]
+        new_point = (start_point[0]+change_i[idx], start_point[1]+change_j[idx])
+        if image[new_point] != 0: # if is ROI
+            border.append(new_point)
+            chain.append(direction)
+            curr_point = new_point
+            break
+
+    count = 0
+    while curr_point != start_point:
+        #figure direction to start search
+        b_direction = (direction + 5) % 8 
+        dirs_1 = range(b_direction, 8)
+        dirs_2 = range(0, b_direction)
+        dirs = []
+        dirs.extend(dirs_1)
+        dirs.extend(dirs_2)
+        for direction in dirs:
+            idx = dir2idx[direction]
+            new_point = (curr_point[0]+change_i[idx], curr_point[1]+change_j[idx])
+            if image[new_point] != 0: # if is ROI
+                border.append(new_point)
+                chain.append(direction)
+                curr_point = new_point
+                break
+        if count == 1000: break
+        count += 1
+    # print("count =", count)
+    # plt.imshow(image, cmap='Greys')
+    # plt.plot([i[1] for i in border], [i[0] for i in border])
+
+    return chain
+
+
+class Dataset:
+    def __init__(self, directory_path):
+        self.data = []
+        self.freeman = []
+        self.target = []
+        for filename in os.listdir(directory_path):
+            path = os.path.join(directory_path, filename)
+            image = load_image_into_2d(path)
+            freeman = freeman_from_np_2d(image)
+
+            target = int(filename[0])
+
+            self.data.append(image)
+            self.freeman.append(freeman)
+            self.target.append(target)
+
 
 def main():
-    im_frame = Image.open("../AFAC/3_0.png")
-    im_frame = im_frame.resize((64, 64), resample=Image.Resampling.NEAREST)
-    im_frame.show()
+    np.set_printoptions(threshold=np.inf)
 
-    np_frame = np.array(im_frame.getdata())
-
-    print(np_frame.shape)
-    print(np_frame)
+    ds = Dataset("../AFAC/")
+    for i in range(len(ds.data)):
+        print(ds.target[i], len(ds.freeman[i]), ds.freeman[i])
 
 
 if __name__ == "__main__":
