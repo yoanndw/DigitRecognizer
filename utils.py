@@ -7,11 +7,14 @@ import cv2
 from matplotlib import pyplot as plt
 from itertools import chain
 
+from dataset import _np_1d_to_2d
+
 INSERTION_COST = 1
 DELETION_COST = 1
 EDITION_COST = 2
 
-def freeman_from_dataframe(dataframe):
+
+def freeman_from_np_2d(image):
     """Returns the Freeman code from a 1D dataframe.
     
     Params:
@@ -21,25 +24,21 @@ def freeman_from_dataframe(dataframe):
         list of int
     """
     # Any results you write to the current directory are saved as output.
-    train_images = dataframe.drop('label', axis=1)
-    print("shape", train_images[200:201].values.shape)
-    image = np.reshape(train_images[200:201].values, (-1, 28)).astype(np.uint8)
-    print("new shape", image.shape)
+    # print("new shape", image.shape)
     # plt.imshow(image, cmap='Greys')
 
-    _, img = cv2.threshold(image,70,255,0)
-    plt.imshow(img, cmap='Greys')
+    # plt.imshow(image, cmap='Greys')
     ## Discover the first point 
-    for i, row in enumerate(img):
+    for i, row in enumerate(image):
         for j, value in enumerate(row):
             if value == 255:
                 start_point = (i, j)
-                print(start_point, value)
+                # print(start_point, value)
                 break
         else:
             continue
         break
-    img[3:6, 19:22]
+    image[3:6, 19:22]
     directions = [ 0,  1,  2,
                 7,      3,
                 6,  5,  4]
@@ -59,7 +58,7 @@ def freeman_from_dataframe(dataframe):
     for direction in directions:
         idx = dir2idx[direction]
         new_point = (start_point[0]+change_i[idx], start_point[1]+change_j[idx])
-        if img[new_point] != 0: # if is ROI
+        if image[new_point] != 0: # if is ROI
             border.append(new_point)
             chain.append(direction)
             curr_point = new_point
@@ -84,9 +83,9 @@ def freeman_from_dataframe(dataframe):
                 break
         if count == 1000: break
         count += 1
-    print("count =", count)
-    plt.imshow(img, cmap='Greys')
-    plt.plot([i[1] for i in border], [i[0] for i in border])
+    # print("count =", count)
+    # plt.imshow(image, cmap='Greys')
+    # plt.plot([i[1] for i in border], [i[0] for i in border])
 
     return chain
     
