@@ -1,9 +1,23 @@
+import os
 import tkinter as tk
 from tkinter import Canvas, Button, Label
 from PIL import Image, ImageDraw
 
 # Compteurs du nombre d'images enregistrées par digits
 digit_counters = {}
+
+def init_digit_counters():
+    global digit_counters
+
+    for i in range(10):
+        digit_counters[i] = 0
+
+    for filename in os.listdir("../AFAC"):
+        digit = int(filename[0])
+        digit_counters[digit] += 1
+
+    print("digit_counters = ", digit_counters)
+
 
 class DigitRecognitionApp:
 
@@ -34,7 +48,8 @@ class DigitRecognitionApp:
             bouton_digit = Button(fenetre, text=str(i), command=lambda i=i: self.selection_digit(i))
             bouton_digit.grid(row=i, column=1, padx=5, pady=5, sticky="ns")
             self.digits_buttons.append(bouton_digit)
-            digit_counters[i] = 0
+
+        init_digit_counters()
 
         self.dessiner = True
         self.selected_digit = None
