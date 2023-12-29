@@ -39,6 +39,10 @@ class DigitRecognitionApp:
         self.bouton_enregistrer = Button(fenetre, text="Enregistrer", command=self.enregistrer_digit)
         self.bouton_enregistrer.grid(row=11, column=0, padx=5, pady=10, sticky="ew")
 
+        # Instancie le bouton "Enregistrer et effacer" et l'associe à la fonction "enregistrer_digit_effacer"
+        self.bouton_enregistrer_effacer = Button(fenetre, text="Enregistrer et effacer", command=self.enregistrer_digit_effacer)
+        self.bouton_enregistrer_effacer.grid(row=12, column=0, padx=5, pady=10, sticky="ew")
+
         # Boutons Digits
         self.digits_buttons = []
         self.selected_digit_button = None
@@ -77,11 +81,26 @@ class DigitRecognitionApp:
 
     # Fonction du bouton "Enregistrer". 
     # Enregistre le digit sous le nom : digit selectionné _ numéro de l'image du digit
+    # Retourne False si aucun chiffre n'est sélectionné
     def enregistrer_digit(self):
         global digit_counters
-        if self.selected_digit is not None:
-            self.image.save(f"../AFAC/{self.selected_digit}_{digit_counters[self.selected_digit]}.png")
-            digit_counters[self.selected_digit] += 1
+
+        if self.selected_digit is None:
+            return False
+        
+        self.image.save(f"../AFAC/{self.selected_digit}_{digit_counters[self.selected_digit]}.png")
+        digit_counters[self.selected_digit] += 1
+
+        return True
+
+    # Fonction du bouton "Enregistrer et effacer"
+    # Enregistre le digit sous le nom : digit selectionné _ numéro de l'image du digit
+    # et efface le dessin
+    def enregistrer_digit_effacer(self):
+        could_save = self.enregistrer_digit()
+
+        if could_save:
+            self.effacer_dessin()
 
     # Fonction des boutons "digit". Permet de selectionner le numéro du digit dessiné.
     # Sert à l'enregistrement. Sert d'annotation automatique.
@@ -100,5 +119,5 @@ if __name__ == "__main__":
 
     fenetre = tk.Tk()
     app = DigitRecognitionApp(fenetre)
-    fenetre.geometry("400x450")
+    fenetre.geometry("400x500")
     fenetre.mainloop()
