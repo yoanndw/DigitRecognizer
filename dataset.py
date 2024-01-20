@@ -119,6 +119,11 @@ class Dataset:
             self.freeman.append(freeman)
             self.target.append(target)
 
+    def tuples(self):
+        """Return a list of tuples with `(ndarray of the image, freeman code, target)`"""
+        
+        return [(self.data[i], self.freeman[i], self.target[i]) for i in range(len(self.data))]
+
 
 def main():
     np.set_printoptions(threshold=np.inf)
