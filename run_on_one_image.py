@@ -11,11 +11,18 @@ def main():
     args = sys.argv
     if len(args) != 2:
         print(f"ERROR: Not enough or too many arguments\nUsage: {args[0]} <image>")
+        print("Exiting.")
         sys.exit(1)
 
     ds = Dataset("../AFAC/")
 
-    img = load_image_into_2d(args[1])
+    try:
+        img = load_image_into_2d(args[1])
+    except FileNotFoundError as e:
+        print("ERROR:", e)
+        print("Exiting.")
+        sys.exit(1)
+
     freeman = freeman_from_np_2d(img)
     print(freeman)
 
