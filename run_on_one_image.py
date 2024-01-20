@@ -4,6 +4,7 @@ import os.path
 import sys
 
 from dataset import Dataset, freeman_from_np_2d, load_image_into_2d
+from knn import compute_class_with_knn, compute_knn
 from naive_bayes import compute_posterior
 
 def main():
@@ -23,6 +24,12 @@ def main():
     for i in range(0, 10):
         posterior = compute_posterior(ds, freeman, i)
         print(i, posterior, sep="\t")
+
+    print("--------KNN--------")
+    # k_nearest = compute_knn(ds, 60, freeman)
+    # print(k_nearest)
+    nearest_neighbor = compute_class_with_knn(ds, 60, freeman)
+    print("Result:", nearest_neighbor)
 
 if __name__ == "__main__":
     main()
