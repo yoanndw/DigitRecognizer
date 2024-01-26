@@ -35,7 +35,7 @@ def main():
     print("--------KNN--------")
     # k_nearest = compute_knn(ds, 60, freeman)
     # print(k_nearest)
-    nearest_neighbor = compute_class_with_knn(ds, 60, freeman)
+    nearest_neighbor = compute_class_with_knn(ds, 3, freeman)
     print("Result:", nearest_neighbor)
 
 if __name__ == "__main__":

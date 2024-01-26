@@ -10,8 +10,8 @@ def compute_knn(ds: Dataset, k: int, freeman: List[int]):
     for (f, t, dist) in sorted_distances:
         print(t, dist, f, sep="\t")
 
-    k_sorted = [(f, t, dist) for (f, t, dist) in sorted_distances if dist <= k]
-    return k_sorted
+    k_nearest = sorted_distances[:k]
+    return k_nearest
 
 def compute_class_with_knn(ds: Dataset, k: int, freeman: List[int]):
     k_sorted = compute_knn(ds, k, freeman)
@@ -19,7 +19,8 @@ def compute_class_with_knn(ds: Dataset, k: int, freeman: List[int]):
     max_class_count = 0
     most_frequent_class = None
     for i in range(0, 10):
-        count = len([(f, t, dist) for (f, t, dist) in k_sorted if t == i])
+        same_class_elems = [(f, t, dist) for (f, t, dist) in k_sorted if t == i]
+        count = len(same_class_elems)
         if count > max_class_count:
             max_class_count = count
             most_frequent_class = i
