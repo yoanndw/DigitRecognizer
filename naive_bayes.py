@@ -55,3 +55,14 @@ def compute_posterior(dataset: Dataset, freeman: List[int], target: int) -> floa
     freeman_prob = _compute_freeman_prob(dataset, freeman)
 
     return likelihood * prior / freeman_prob
+
+def compute_class_with_naivebayes(dataset: Dataset, freeman: List[int]) -> int:
+    max_prob = 0
+    cls = None
+    for i in range(0, 10):
+        p = compute_posterior(dataset, freeman, i)
+        if p > max_prob:
+            max_prob = p
+            cls = i
+
+    return cls
