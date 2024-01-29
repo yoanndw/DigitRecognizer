@@ -1,6 +1,5 @@
 import os
 import os.path
-
 import cv2
 import numpy as np
 from PIL import Image
@@ -131,7 +130,5 @@ def main():
     ds = Dataset("../AFAC/")
     for i in range(len(ds.data)):
         print(ds.target[i], len(ds.freeman[i]), ds.freeman[i])
-
-
 if __name__ == "__main__":
     main()
