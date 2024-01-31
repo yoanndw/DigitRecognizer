@@ -87,7 +87,7 @@ class DigitRecognitionApp:
         if self.selected_digit is None:
             return False
         
-        self.image.save(f"../ImageMl/{self.selected_digit}_{digit_counters[self.selected_digit]}.png")
+        self.image.save(f"./ImageMl/{self.selected_digit}_{digit_counters[self.selected_digit]}.png")
         digit_counters[self.selected_digit] += 1
 
         return True
