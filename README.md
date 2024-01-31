@@ -1,6 +1,6 @@
 # Projet de Machine Learning
 
-### Auteurs : Yoann Dewilde et Thomas Derudder 
+### Auteurs : Yoann Dewilde et Kenny Bramban
 
 ## Choice of technos : 
 

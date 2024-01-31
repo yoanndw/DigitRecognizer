@@ -5,6 +5,7 @@ import sys
 from dataset import Dataset, freeman_from_np_2d, load_image_into_2d
 from knn import compute_class_with_knn, compute_knn
 from naive_bayes import compute_posterior
+from cross_validation import cross_val_k
 
 def main():
     args = sys.argv
@@ -38,5 +39,8 @@ def main():
     nearest_neighbor = compute_class_with_knn(ds, 3, freeman)
     print("Result:", nearest_neighbor)
 
+    print("--------CROSS_VALIDATION--------")
+    cv =cross_val_k(ds,freeman, 5)
+    print("Result:", cv)
 if __name__ == "__main__":
     main()

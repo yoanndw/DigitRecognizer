@@ -5,7 +5,7 @@ from dataset import Dataset
 class ModelBase:
     def predict_on_dataset(self, dataset: Dataset) -> List[int]:
         predictions = []
-        for i in range(len(dataset.data)):
+        for i in range(0,len(dataset.data),1):
             predictions.append(self.predict(dataset.freeman[i]))
 
         return predictions
