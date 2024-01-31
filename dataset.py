@@ -128,7 +128,7 @@ class Dataset:
                 self.freeman.append(freeman)
                 self.target.append(target)
 
-    def load_sklearn(self):
+    def load_mnist(self):
         (train_data, train_target), (test_data, test_target) = mnist.load_data()
         images = []
         images.extend(train_data)
@@ -165,7 +165,7 @@ class Dataset:
 def main():
     np.set_printoptions(threshold=np.inf)
     ds = Dataset("../projet_ml/ImageMl")
-    ds.load_sklearn()
+    ds.load_mnist()
     for i in range(len(ds.data)):
         print(ds.target[i], len(ds.freeman[i]), ds.freeman[i])
 if __name__ == "__main__":
