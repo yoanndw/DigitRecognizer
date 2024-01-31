@@ -123,9 +123,7 @@ class Dataset:
                 path = os.path.join(directory_path, filename)
                 image = load_image_into_2d(path)
                 freeman = freeman_from_np_2d(image)
-
                 target = int(filename[0])
-
                 self.data.append(image)
                 self.freeman.append(freeman)
                 self.target.append(target)
@@ -157,7 +155,6 @@ class Dataset:
             new_ds.data.append(self.data[i])
             new_ds.target.append(self.target[i])
             new_ds.freeman.append(self.freeman[i])
-
         return new_ds
 
     def cross_val_split(self, n_splits: int):
