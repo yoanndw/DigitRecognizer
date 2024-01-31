@@ -1,6 +1,8 @@
 # Taken from https://www.kaggle.com/code/mburger/freeman-chain-code-script/
 # This code is based on http://www.cs.unca.edu/~reiser/imaging/chaincode.html
 
+import random
+
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import cv2
@@ -49,6 +51,18 @@ def levenshtein(s1, s2):
             distance[i][j] = min(d1, d2, d3)
 
     return distance[len_s1][len_s2]
+
+
+def train_test_split(dataset, test_size: float):
+    train_indices = []
+    test_indices = []
+    for i in range(len(dataset.data)):
+        if random.random() <= test_size:
+            test_indices.append(i)
+        else:
+            train_indices.append(i)
+
+    return train_indices, test_indices
 
 
 def main():

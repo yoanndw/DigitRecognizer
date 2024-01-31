@@ -29,6 +29,13 @@ def load_image_into_2d(path):
     ret, image = cv2.threshold(arr, 127, 255, 0)
     return image
 
+def flatten_2d_list(lst):
+    flat = []
+    for i in range(len(lst)):
+        for j in range(len(lst[i])):
+            flat.append(lst[i][j])
+
+    return flat
 
 def freeman_from_np_2d(image):
     """Returns the Freeman code from a 1D dataframe.
@@ -127,6 +134,14 @@ class Dataset:
                 self.data.append(image)
                 self.freeman.append(freeman)
                 self.target.append(target)
+
+    def flattened(self):
+        new_ds = Dataset()
+        new_ds.data = [flatten_2d_list(d) for d in self.data]
+        new_ds.freeman = self.freeman
+        new_ds.target = self.target
+
+        return new_ds
 
     def load_mnist(self):
         (train_data, train_target), (test_data, test_target) = mnist.load_data()

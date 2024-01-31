@@ -2,9 +2,11 @@ from typing import List
 import random
 
 from dataset import Dataset
+from DT import DT
 from knn import Knn
 from model_base import ModelBase
 from naive_bayes import NaiveBayes
+from utils import train_test_split
 
 class MetricsForClass:
     def __init__(self, cls, tn, tp, fn, fp):
@@ -55,7 +57,7 @@ class Metrics:
         self.specificity = total_specificity / len(metrics_by_class)
 
 
-def compute_confusion_matrix(train_set: List[int], test_ds: Dataset, model: ModelBase):
+def compute_confusion_matrix(train_set: List[int], test_ds: Dataset, model: ModelBase, predict_from="F"):
     matrix = []
     for i in range(10):
         matrix.append([])
@@ -64,7 +66,11 @@ def compute_confusion_matrix(train_set: List[int], test_ds: Dataset, model: Mode
 
     model.train(train_set)
     for (d, f, t) in test_ds.tuples():
-        predicted = model.predict(f)
+        if predict_from == "F":
+            to_predict = f
+        else:
+            to_predict = d
+        predicted = model.predict(to_predict)
         matrix[t][predicted] += 1
 
     return matrix
@@ -106,16 +112,7 @@ def compute_metrics(confusion_matrix: List[List[int]]):
 
     return Metrics(accurate_predictions, matrix_sum, results_by_class)
 
-def train_test_split(dataset: Dataset, test_size: float):
-    train_indices = []
-    test_indices = []
-    for i in range(len(dataset.data)):
-        if random.random() <= test_size:
-            test_indices.append(i)
-        else:
-            train_indices.append(i)
 
-    return train_indices, test_indices
 
 def main_compute_from_matrix():
     matrix = [
@@ -134,15 +131,16 @@ def main_compute_from_matrix():
 
 def main():
     ds = Dataset("ImageMl")
+    # ds.load_mnist()
 
-    m = Knn(ds, 3)
+    m = DT(ds)
 
     train, test = train_test_split(ds, 0.3)
     print(train, test)
     print(len(train), len(test))
 
     m.train(train)
-    matrix = compute_confusion_matrix(train, ds.extract_set(test), m)
+    matrix = compute_confusion_matrix(train, ds.extract_set(test), m, predict_from="D")
     print(matrix)
     metrics: Metrics = compute_metrics(matrix)
     for cls, m in enumerate(metrics.metrics_by_class):
