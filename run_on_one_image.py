@@ -2,7 +2,6 @@ import numpy as np
 import os
 import os.path
 import sys
-
 from dataset import Dataset, freeman_from_np_2d, load_image_into_2d
 from knn import compute_class_with_knn, compute_knn
 from naive_bayes import compute_posterior
@@ -14,7 +13,8 @@ def main():
         print("Exiting.")
         sys.exit(1)
 
-    ds = Dataset("../AFAC/")
+   ## ds = Dataset("../AFAC/")
+    ds = Dataset("/home/kenny/Documents/projet_ml/ImageMl/ImageMl/image26.png")
 
     try:
         img = load_image_into_2d(args[1])

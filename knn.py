@@ -1,5 +1,4 @@
 from typing import List
-
 from dataset import Dataset
 from utils import levenshtein
 
@@ -9,7 +8,6 @@ def compute_knn(ds: Dataset, k: int, freeman: List[int]):
     print("Digit\tDistance\tFreeman")
     for (f, t, dist) in sorted_distances:
         print(t, dist, f, sep="\t")
-
     k_nearest = sorted_distances[:k]
     return k_nearest
 
