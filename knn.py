@@ -19,9 +19,9 @@ class Knn(ModelBase):
 def compute_knn(ds: Dataset, k: int, freeman: List[int]):
     ds_with_distance = [(f, t, levenshtein(f, freeman)) for (d, f, t) in ds.tuples()]
     sorted_distances = sorted(ds_with_distance, key=lambda t: t[2])
-    print("Digit\tDistance\tFreeman")
-    for (f, t, dist) in sorted_distances:
-        print(t, dist, f, sep="\t")
+    # print("Digit\tDistance\tFreeman")
+    # for (f, t, dist) in sorted_distances:
+    #     print(t, dist, f, sep="\t")
     k_nearest = sorted_distances[:k]
     return k_nearest
 
