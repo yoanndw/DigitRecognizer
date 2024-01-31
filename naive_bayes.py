@@ -1,8 +1,9 @@
 from typing import List
 
 from dataset import Dataset
+from model_base import ModelBase
 
-class NaiveBayes:
+class NaiveBayes(ModelBase):
     def __init__(self, dataset: Dataset):
         self.dataset = dataset
 

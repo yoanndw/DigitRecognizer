@@ -43,7 +43,8 @@ def cross_val_k(dataset: Dataset, ks: List[int], n_splits: int):
         mean_accuracy = 0
         for train, test in dataset.cross_val_split(n_splits):
             clf = Knn(dataset, k)
-            mean_accuracy += .
+            clf.train(train)
+            mean_accuracy += clf.accuracy(dataset.extract_set(test))
 
         mean_accuracy /= n_splits
         accuracies[k] = mean_accuracy

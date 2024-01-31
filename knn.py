@@ -1,8 +1,9 @@
 from typing import List
 from dataset import Dataset
+from model_base import ModelBase
 from utils import levenshtein
 
-class Knn:
+class Knn(ModelBase):
     def __init__(self, dataset: Dataset, k: int):
         self.dataset = dataset
         self.k = k
