@@ -24,7 +24,7 @@ class DigitRecognitionApp:
 
         # Instancie la fenetre de l'interface utilisateur
         self.fenetre = fenetre
-        self.fenetre.title("Le paint de la maison !")
+        self.fenetre.title("Digit painter")
 
         # Instancie la zone de dessin.
         self.canvas = Canvas(fenetre, width=300, height=300, bg="black", bd=2, relief=tk.GROOVE)
