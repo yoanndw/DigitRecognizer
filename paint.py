@@ -11,7 +11,7 @@ def init_digit_counters():
     for i in range(10):
         digit_counters[i] = 0
 
-    for filename in os.listdir("/home/kenny/Documents/projet_ml/ImageMl/"):
+    for filename in os.listdir("ImageMl/"):
         digit = int(filename[0])
         digit_counters[digit] += 1
 
