@@ -1,15 +1,18 @@
 import numpy as np
 import os
 import os.path
+from knn import  compute_class_with_knn
+
 from dataset import Dataset, freeman_from_np_2d, load_image_into_2d
 from naive_bayes import compute_posterior
 
 
 def main():
     np.set_printoptions(threshold=np.inf)
-    img = load_image_into_2d("../projet_ml/ImageMl/7_3.png")
+    img = load_image_into_2d("../projet_ml/ImageMl/0_0.png")
     freeman = freeman_from_np_2d(img)
-    print(freeman)
+    print("freeman", freeman)
+
     one_freeman = [3, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 6, 5, 5, 5, 5, 6, 5, 5, 5, 5, 4, 3, 5, 7, 7, 7, 7, 7, 7, 7, 7,
                    1, 3, 3, 3, 3, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 6, 7, 6, 6, 6, 6, 7, 7, 2,
                    2, 2, 3, 2, 2, 2, 2, 2]
@@ -18,7 +21,5 @@ def main():
     for i in range(10):
         posterior = compute_posterior(ds, one_freeman, i)
         print(i, posterior)
-
-
 if __name__ == "__main__":
     main()
