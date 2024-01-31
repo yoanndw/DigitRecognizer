@@ -52,3 +52,12 @@ def cross_val_k(dataset: Dataset, ks: List[int], n_splits: int):
     sorted_accuracies = sorted(accuracies.items(), key=lambda e: e[1], reverse=True)
     # print(sorted_accuracies)
     return sorted_accuracies
+
+def main():
+    ds = Dataset("ImageMl/")
+    ds.load_sklearn()
+    results = cross_val_k(ds, [3, 4, 5, 8, 10], 8)
+    print("Results", results)
+
+if __name__ == "__main__":
+    main()
