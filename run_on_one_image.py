@@ -14,7 +14,7 @@ def main():
         sys.exit(1)
 
     ## ds = Dataset("../AFAC/")
-    ds = Dataset("/home/kenny/Documents/projet_ml/ImageMl/ImageMl/image26.png")
+    ds = Dataset("../projet_ml/ImageMl")
 
     try:
         img = load_image_into_2d(args[1])

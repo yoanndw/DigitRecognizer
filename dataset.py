@@ -144,7 +144,7 @@ class Dataset:
 
 def main():
     np.set_printoptions(threshold=np.inf)
-    ds = Dataset("../AFAC/")
+    ds = Dataset("../projet_ml/ImageMl")
     for i in range(len(ds.data)):
         print(ds.target[i], len(ds.freeman[i]), ds.freeman[i])
 if __name__ == "__main__":
