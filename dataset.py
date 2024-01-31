@@ -3,11 +3,12 @@ import os.path
 from typing import List
 
 import cv2
+from keras.datasets import mnist
 import numpy as np
 from PIL import Image
 from sklearn.model_selection import KFold
 
-IMAGE_SIZE = 64
+IMAGE_SIZE = 28
 
 def _open_image(path):
     image = Image.open(path).resize((IMAGE_SIZE, IMAGE_SIZE), resample=Image.Resampling.NEAREST)
@@ -73,11 +74,14 @@ def freeman_from_np_2d(image):
     for direction in directions:
         idx = dir2idx[direction]
         new_point = (start_point[0]+change_i[idx], start_point[1]+change_j[idx])
-        if image[new_point] != 0: # if is ROI
-            border.append(new_point)
-            chain.append(direction)
-            curr_point = new_point
-            break
+        try:
+            if image[new_point] != 0: # if is ROI
+                border.append(new_point)
+                chain.append(direction)
+                curr_point = new_point
+                break
+        except IndexError:
+            pass
 
     count = 0
     while curr_point != start_point:
@@ -91,11 +95,14 @@ def freeman_from_np_2d(image):
         for direction in dirs:
             idx = dir2idx[direction]
             new_point = (curr_point[0]+change_i[idx], curr_point[1]+change_j[idx])
-            if image[new_point] != 0: # if is ROI
-                border.append(new_point)
-                chain.append(direction)
-                curr_point = new_point
-                break
+            try:
+                if image[new_point] != 0: # if is ROI
+                    border.append(new_point)
+                    chain.append(direction)
+                    curr_point = new_point
+                    break
+            except IndexError:
+                pass
         if count == 1000: break
         count += 1
     # print("count =", count)
@@ -123,6 +130,22 @@ class Dataset:
                 self.freeman.append(freeman)
                 self.target.append(target)
 
+    def load_sklearn(self):
+        (train_data, train_target), (test_data, test_target) = mnist.load_data()
+        images = []
+        images.extend(train_data)
+        images.extend(test_data)
+        images = [img.reshape((IMAGE_SIZE, IMAGE_SIZE)) for img in images]
+        images = [cv2.threshold(img, 127, 255, 0)[1] for img in images]
+
+        targets = []
+        targets.extend(train_target)
+        targets.extend(test_target)
+        
+        self.data.extend(images)
+        self.target.extend(targets)
+        self.freeman.extend([freeman_from_np_2d(img) for img in images])
+
     def tuples(self):
         """Return a list of tuples with `(ndarray of the image, freeman code, target)`"""
         
@@ -145,6 +168,7 @@ class Dataset:
 def main():
     np.set_printoptions(threshold=np.inf)
     ds = Dataset("../projet_ml/ImageMl")
+    ds.load_sklearn()
     for i in range(len(ds.data)):
         print(ds.target[i], len(ds.freeman[i]), ds.freeman[i])
 if __name__ == "__main__":
