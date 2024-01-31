@@ -1,5 +1,7 @@
 import os
 import os.path
+from typing import List
+
 import cv2
 import numpy as np
 from PIL import Image
@@ -103,25 +105,36 @@ def freeman_from_np_2d(image):
 
 
 class Dataset:
-    def __init__(self, directory_path):
+    def __init__(self, directory_path=None):
         self.data = []
         self.freeman = []
         self.target = []
-        for filename in os.listdir(directory_path):
-            path = os.path.join(directory_path, filename)
-            image = load_image_into_2d(path)
-            freeman = freeman_from_np_2d(image)
 
-            target = int(filename[0])
+        if directory_path is not None:
+            for filename in os.listdir(directory_path):
+                path = os.path.join(directory_path, filename)
+                image = load_image_into_2d(path)
+                freeman = freeman_from_np_2d(image)
 
-            self.data.append(image)
-            self.freeman.append(freeman)
-            self.target.append(target)
+                target = int(filename[0])
+
+                self.data.append(image)
+                self.freeman.append(freeman)
+                self.target.append(target)
 
     def tuples(self):
         """Return a list of tuples with `(ndarray of the image, freeman code, target)`"""
         
         return [(self.data[i], self.freeman[i], self.target[i]) for i in range(len(self.data))]
+
+    def extract_set(self, set: List[int]):
+        new_ds = Dataset()
+        for i in set:
+            new_ds.data.append(self.data[i])
+            new_ds.target.append(self.target[i])
+            new_ds.freeman.append(self.freeman[i])
+
+        return new_ds
 
 
 def main():

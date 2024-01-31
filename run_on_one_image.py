@@ -13,7 +13,7 @@ def main():
         print("Exiting.")
         sys.exit(1)
 
-   ## ds = Dataset("../AFAC/")
+    ## ds = Dataset("../AFAC/")
     ds = Dataset("/home/kenny/Documents/projet_ml/ImageMl/ImageMl/image26.png")
 
     try:

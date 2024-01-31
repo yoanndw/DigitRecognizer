@@ -2,6 +2,18 @@ from typing import List
 
 from dataset import Dataset
 
+class NaiveBayes:
+    def __init__(self, dataset: Dataset):
+        self.dataset = dataset
+
+    def train(self, train_set: List[int]):
+        self.train_set = train_set
+
+    def predict(self, freeman: List[int]) -> int:
+        train_ds = self.dataset.extract_set(self.train_set)
+        return compute_class_with_naivebayes(train_ds, freeman)
+    
+
 def _compute_prior(dataset: Dataset, target: int) -> float: # P(Y)
     targets = dataset.target
     return len([t for t in targets if t == target]) / len(targets)
