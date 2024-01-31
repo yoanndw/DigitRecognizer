@@ -1,8 +1,13 @@
+from typing import List
+
 import numpy as np
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn import datasets
 from sklearn import svm
+
+from dataset import Dataset
+from knn import Knn
 
 def perform_cross_validation(X, y, model, cv=5):
     """
@@ -32,3 +37,17 @@ def perform_cross_validation(X, y, model, cv=5):
 
     return mean_accuracy, std_dev
 
+def cross_val_k(dataset: Dataset, ks: List[int], n_splits: int):
+    accuracies = {}
+    for k in ks:
+        mean_accuracy = 0
+        for train, test in dataset.cross_val_split(n_splits):
+            clf = Knn(dataset, k)
+            mean_accuracy += .
+
+        mean_accuracy /= n_splits
+        accuracies[k] = mean_accuracy
+
+    sorted_accuracies = sorted(accuracies.items(), key=lambda e: e[1], reverse=True)
+    # print(sorted_accuracies)
+    return sorted_accuracies

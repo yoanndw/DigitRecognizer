@@ -5,6 +5,7 @@ from typing import List
 import cv2
 import numpy as np
 from PIL import Image
+from sklearn.model_selection import KFold
 
 IMAGE_SIZE = 64
 
@@ -135,6 +136,10 @@ class Dataset:
             new_ds.freeman.append(self.freeman[i])
 
         return new_ds
+
+    def cross_val_split(self, n_splits: int):
+        kf = KFold(n_splits=n_splits)
+        return kf.split(self.data)
 
 
 def main():
