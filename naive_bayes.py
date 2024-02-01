@@ -44,6 +44,7 @@ def _compute_likelihood(dataset: Dataset, expected_freeman: List[int], target: i
 
 def _compute_freeman_prob_at_i(dataset: Dataset, i: int, expected_value: int) -> float:
     count_values_with_freeman = len([f for f in dataset.freeman if f[i] == expected_value])
+
     return count_values_with_freeman / len(dataset.freeman)
 
 
@@ -67,10 +68,11 @@ def compute_posterior(dataset: Dataset, freeman: List[int], target: int) -> floa
     prior = _compute_prior(dataset, target)
     freeman_prob = _compute_freeman_prob(dataset, freeman)
 
-    item_count = freeman.count(target);
-    vocab_size = 10  #0 to 9
-    alpha= 1
-    return (item_count+alpha) / (vocab_size + len(freeman)*alpha)
+    # item_count = freeman.count(target);
+    # vocab_size = 10  #0 to 9
+    # alpha= 1
+    # return (item_count+alpha) / (vocab_size + len(freeman)*alpha)
+    return likelihood * prior / freeman_prob
 
 
 def compute_class_with_naivebayes(dataset: Dataset, freeman: List[int]) -> int:

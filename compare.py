@@ -66,10 +66,11 @@ def compute_confusion_matrix(train_set: List[int], test_ds: Dataset, model: Mode
 
     model.train(train_set)
     for (d, f, t) in test_ds.tuples():
-        if predict_from == "F":
-            to_predict = f
-        else:
+        if predict_from == "D":
             to_predict = d
+        else:
+            to_predict = f
+        print("to predict", to_predict)
         predicted = model.predict(to_predict)
         matrix[t][predicted] += 1
 
@@ -133,14 +134,14 @@ def main():
     ds = Dataset("ImageMl")
     # ds.load_mnist()
 
-    m = DT(ds)
+    m = NaiveBayes(ds)
 
     train, test = train_test_split(ds, 0.3)
     print(train, test)
     print(len(train), len(test))
 
     m.train(train)
-    matrix = compute_confusion_matrix(train, ds.extract_set(test), m, predict_from="D")
+    matrix = compute_confusion_matrix(train, ds.extract_set(test), m)
     print(matrix)
     metrics: Metrics = compute_metrics(matrix)
     for cls, m in enumerate(metrics.metrics_by_class):
