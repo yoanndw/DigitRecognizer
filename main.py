@@ -3,7 +3,7 @@ import os
 import os.path
 import tkinter as tk
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageTk
 
 from dataset import Dataset, freeman_from_np_2d, load_image_into_2d, image_to_np_2d, IMAGE_SIZE
 from DT import DT
@@ -28,6 +28,8 @@ class DigitRecognizerApp:
         self.draw = ImageDraw.Draw(self.image)
         self.canvas.bind("<B1-Motion>", self.draw_digit)
 
+        
+
         self.clear_button = tk.Button(self.win, text="Clear", command=self.clear_digit)
         self.clear_button.grid(row=1, column=0)
 
@@ -42,8 +44,14 @@ class DigitRecognizerApp:
         self.dt_prediction_var = tk.StringVar(self.win)
         self.dt_prediction_var.set("Decision Tree:")
 
+        # Generated img 28*28
+        self.resized_image = Image.new("L", (28, 28), color="black")
+        self.resized_image_tk = ImageTk.PhotoImage(self.resized_image)
+        self.resized_image_lbl = tk.Label(self.win, image=self.resized_image_tk)
+        self.resized_image_lbl.grid(row=0, column=1)
+
         self.results_frame = tk.LabelFrame(self.win, text="Predictions")
-        self.results_frame.grid(row=0, column=1)
+        self.results_frame.grid(row=0, column=2)
 
         self.nb_prediction = tk.Label(self.results_frame, textvariable=self.nb_prediction_var)
         self.nb_prediction.grid(row=0, column=0, ipadx=20)
@@ -53,6 +61,7 @@ class DigitRecognizerApp:
 
         self.dt_prediction = tk.Label(self.results_frame, textvariable=self.dt_prediction_var)
         self.dt_prediction.grid(row=2, column=0, ipadx=20)
+
 
 
     def draw_digit(self, event):
@@ -66,11 +75,19 @@ class DigitRecognizerApp:
         self.image = Image.new("L", (280, 280), color="black")
         self.draw = ImageDraw.Draw(self.image)
 
+    def update_generated_image(self):
+        self.resized_image_tk = ImageTk.PhotoImage(self.resized_image)
+        self.resized_image_lbl.config(image=self.resized_image_tk)
+
+
     def predict(self):
         resized_image = self.image.resize((IMAGE_SIZE, IMAGE_SIZE), resample=Image.Resampling.NEAREST)
         image_arr = image_to_np_2d(resized_image)
         print(image_arr.shape)
         print(image_arr)
+
+        self.resized_image = Image.fromarray(image_arr)
+        self.update_generated_image()
 
         freeman = freeman_from_np_2d(image_arr)
 
@@ -88,7 +105,7 @@ class DigitRecognizerApp:
 
 
 def main():
-    # np.set_printoptions(threshold=np.inf)
+    np.set_printoptions(threshold=np.inf)
     print("Loading dataset...")
     dataset = Dataset("ImageMl")
     print("Dataset loaded.")
