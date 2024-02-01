@@ -42,14 +42,18 @@ class DigitRecognizerApp:
         self.dt_prediction_var = tk.StringVar(self.win)
         self.dt_prediction_var.set("Decision Tree:")
 
-        self.nb_prediction = tk.Label(self.win, textvariable=self.nb_prediction_var)
-        self.nb_prediction.grid(row=0, column=1)
+        self.results_frame = tk.LabelFrame(self.win, text="Predictions")
+        self.results_frame.grid(row=0, column=1)
 
-        self.knn_prediction = tk.Label(self.win, textvariable=self.knn_prediction_var)
-        self.knn_prediction.grid(row=1, column=1)
+        self.nb_prediction = tk.Label(self.results_frame, textvariable=self.nb_prediction_var)
+        self.nb_prediction.grid(row=0, column=0, ipadx=20)
 
-        self.dt_prediction = tk.Label(self.win, textvariable=self.dt_prediction_var)
-        self.dt_prediction.grid(row=2, column=1)
+        self.knn_prediction = tk.Label(self.results_frame, textvariable=self.knn_prediction_var)
+        self.knn_prediction.grid(row=1, column=0, ipadx=20)
+
+        self.dt_prediction = tk.Label(self.results_frame, textvariable=self.dt_prediction_var)
+        self.dt_prediction.grid(row=2, column=0, ipadx=20)
+
 
     def draw_digit(self, event):
         x, y = event.x, event.y
@@ -102,7 +106,7 @@ def main():
 
     window = tk.Tk()
     window.title("Digit recognizer")
-    window.geometry("400x500")
+    window.geometry("500x500")
     app = DigitRecognizerApp(window, dataset, naive_bayes, knn, dt)
     window.mainloop()
 
