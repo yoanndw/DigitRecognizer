@@ -28,10 +28,10 @@ class DigitRecognizerApp:
         self.draw = ImageDraw.Draw(self.image)
         self.canvas.bind("<B1-Motion>", self.draw_digit)
 
-        self.clear_button = tk.Button(self.win, text="Effacer", command=self.clear_digit)
+        self.clear_button = tk.Button(self.win, text="Clear", command=self.clear_digit)
         self.clear_button.grid(row=1, column=0)
 
-        self.predict_button = tk.Button(self.win, text="Predire", command=self.predict)
+        self.predict_button = tk.Button(self.win, text="Predict", command=self.predict)
         self.predict_button.grid(row=2, column=0)
 
         # Results
