@@ -45,7 +45,7 @@ def _compute_likelihood(dataset: Dataset, expected_freeman: List[int], target: i
 def _compute_freeman_prob_at_i(dataset: Dataset, i: int, expected_value: int) -> float:
     count_values_with_freeman = len([f for f in dataset.freeman if f[i] == expected_value])
 
-    return count_values_with_freeman / len(dataset.freeman)
+    return (count_values_with_freeman + 1) / (len(dataset.freeman) + 10)
 
 
 def _compute_freeman_prob(dataset: Dataset, expected_freeman: List[int]) -> float:

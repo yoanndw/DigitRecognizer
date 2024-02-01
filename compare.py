@@ -70,7 +70,7 @@ def compute_confusion_matrix(train_set: List[int], test_ds: Dataset, model: Mode
             to_predict = d
         else:
             to_predict = f
-        print("to predict", to_predict)
+        # print("to predict", t, to_predict)
         predicted = model.predict(to_predict)
         matrix[t][predicted] += 1
 
@@ -129,19 +129,9 @@ def main_compute_from_matrix():
         print("recall", m.recall)
         print("specificity", m.specificity)
 
-
-def main():
-    ds = Dataset("ImageMl")
-    # ds.load_mnist()
-
-    m = NaiveBayes(ds)
-
-    train, test = train_test_split(ds, 0.3)
-    print(train, test)
-    print(len(train), len(test))
-
+def run_tests(ds, m, train, test, predict_from="F"):
     m.train(train)
-    matrix = compute_confusion_matrix(train, ds.extract_set(test), m)
+    matrix = compute_confusion_matrix(train, ds.extract_set(test), m, predict_from=predict_from)
     print(matrix)
     metrics: Metrics = compute_metrics(matrix)
     for cls, m in enumerate(metrics.metrics_by_class):
@@ -155,6 +145,28 @@ def main():
     print("precision", metrics.precision)
     print("recall", metrics.recall)
     print("specificity", metrics.specificity)
+
+
+def main():
+    ds = Dataset("ImageMl")
+    # ds.load_mnist()
+
+
+    train, test = train_test_split(ds, 0.3)
+    print(train, test)
+    print(len(train), len(test))
+
+    m = NaiveBayes(ds)
+    print("\n\n\nNaive Bayes\n\n\n")
+    run_tests(ds, m, train, test)
+
+    m = Knn(ds, 8)
+    print("\n\n\nKNN 8\n\n\n")
+    run_tests(ds, m, train, test)
+
+    m = DT(ds)
+    print("\n\n\nDT\n\n\n")
+    run_tests(ds, m, train, test, predict_from="D")
 
     
 
