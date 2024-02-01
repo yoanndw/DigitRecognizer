@@ -14,7 +14,7 @@ def _open_image(path):
     image = Image.open(path).resize((IMAGE_SIZE, IMAGE_SIZE), resample=Image.Resampling.NEAREST)
     return image
 
-def _image_to_np_2d(image):
+def image_to_np_2d(image):
     return _np_1d_to_2d(_image_to_np_1d(image))
 
 def _np_1d_to_2d(array):
@@ -25,7 +25,7 @@ def _image_to_np_1d(image):
 
 def load_image_into_2d(path):
     image = _open_image(path)
-    arr = _image_to_np_2d(image)
+    arr = image_to_np_2d(image)
     ret, image = cv2.threshold(arr, 127, 255, 0)
     return image
 
