@@ -9,6 +9,7 @@ from PIL import Image
 from sklearn.model_selection import KFold
 
 IMAGE_SIZE = 28
+MIN_FREEMAN_LENGTH = 5 # Minimal Freeman code length to be included in the dataset
 
 def _open_image(path):
     image = Image.open(path).resize((IMAGE_SIZE, IMAGE_SIZE), resample=Image.Resampling.NEAREST)
@@ -131,9 +132,11 @@ class Dataset:
                 image = load_image_into_2d(path)
                 freeman = freeman_from_np_2d(image)
                 target = int(filename[0])
-                self.data.append(image)
-                self.freeman.append(freeman)
-                self.target.append(target)
+
+                if len(freeman) >= MIN_FREEMAN_LENGTH:
+                    self.data.append(image)
+                    self.freeman.append(freeman)
+                    self.target.append(target)
 
     def flattened(self):
         new_ds = Dataset()
