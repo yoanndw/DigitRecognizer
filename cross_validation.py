@@ -53,7 +53,7 @@ def cross_val_k(dataset: Dataset, ks: List[int], n_splits: int):
 
 def main():
     ds = Dataset("ImageMl/")
-    ds.load_sklearn()
+    # ds.load_sklearn()
     results = cross_val_k(ds, [3, 4, 5, 8, 10], 8)
     print("Results", results)
 
